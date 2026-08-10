@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Cake Delight — The Catalog</title>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+
+  <!-- =========================================================
+       NAVIGATION
+       ========================================================= -->
+
+  <nav class="cd-navbar">
+    <div class="cd-navbar__inner">
+
+  <div class="cd-logo">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M4 21V13a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8"
+        stroke="#C4486B"
+        stroke-width="1.6"
+        stroke-linecap="round"
+      />
+      <path
+        d="M2 21h20"
+        stroke="#3B2A20"
+        stroke-width="1.6"
+        stroke-linecap="round"
+      />
+      <path
+        d="M6 11V8a6 6 0 0 1 12 0v3"
+        stroke="#3B2A20"
+        stroke-width="1.6"
+        stroke-linecap="round"
+      />
+      <circle cx="12" cy="4" r="1.4" fill="#C89B3C" />
+    </svg>
+
+    Cake Delight
+  </div>
+
+  <div class="cd-nav-links">
+    <a href="index.html" data-nav="catalog" class="is-active">
+      Catalog
+    </a>
+
+    <a href="basket.html" data-nav="basket">
+      Basket
+      <span id="cd-basket-count" class="cd-badge">0</span>
+    </a>
+
+    <a href="orders.html" data-nav="orders">
+      Orders
+    </a>
+
+  <a href="ratings.html" data-nav="ratings">
+      Ratings
+    </a>
+  </div>
+
+  <span
+    id="cd-user-chip"
+    class="cd-user-chip"
+    title="Click to change your baker ID"
+  ></span>
+
+  <button
+    id="cd-settings-btn"
+    class="cd-icon-btn"
+    title="Service settings"
+    aria-label="Settings"
+  >
+    <svg
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <circle cx="12" cy="12" r="3" />
+
+      <path
+        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.36.4.66.74.83.34.17.55.24.86.24H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+      />
+    </svg>
+  </button>
+
+</div>
+
+  </nav>
+
+  <!-- =========================================================
+       HERO SECTION
+       ========================================================= -->
+
+  <header class="cd-hero">
+
+<div>
+
+  <p class="cd-hero__eyebrow">
+    Baked fresh, rated by real bakers
+  </p>
+
+  <h1>
+    Every slice tells<br />
+    <em>a little story.</em>
+  </h1>
+
+  <p>
+    Browse the full case, filter by what you're craving,
+    and add your favourites to the basket in one tap.
+  </p>
+
+</div>
+
+<div class="cd-hero__art">
+
+  <img
+    src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=80&auto=format&fit=crop"
+    alt="Assorted decorated cakes on a bakery counter"
+  />
+
+  <div class="cd-hero__stamp">
+    est. today, made with butter
+  </div>
+
+</div>
+
+  </header>
+
+  <!-- =========================================================
+       FILTER SECTION
+       ========================================================= -->
+
+  <section class="cd-filter-bar">
+
+<form id="cd-filter-form" class="cd-filter-card">
+
+  <div
+    class="cd-field"
+    style="flex:1.4 1 200px;"
+  >
+
+    <label for="f-name">
+      Search by name
+    </label>
+
+    <input
+      type="text"
+      id="f-name"
+      placeholder="e.g. Red velvet"
+    />
+
+  </div>
+
+
+  <div class="cd-field">
+
+    <label for="f-category">
+      Category
+    </label>
+
+    <select id="f-category">
+
+      <option value="">
+        All categories
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="cd-price-row">
+
+    <div class="cd-field">
+
+      <label for="f-min">
+        Min price
+      </label>
+
+      <input
+        type="number"
+        id="f-min"
+        min="0"
+        placeholder="0"
+      />
+
+    </div>
+
+
+    <div class="cd-field">
+
+      <label for="f-max">
+        Max price
+      </label>
+
+      <input
+        type="number"
+        id="f-max"
+        min="0"
+        placeholder="Any"
+      />
+
+    </div>
+
+  </div>
+
+
+  <div class="cd-filter-actions">
+
+    <button
+      type="submit"
+      class="cd-btn cd-btn--primary"
+    >
+      Filter
+    </button>
+
+    <button
+      type="button"
+      id="cd-clear-filters"
+      class="cd-btn cd-btn--ghost"
+    >
+      Clear
+    </button>
+
+  </div>
+
+</form>
+
+  </section>
+
+  <!-- =========================================================
+       ERROR BANNER
+       ========================================================= -->
+
+  <div
+    id="cd-error-banner"
+    class="cd-error-banner"
+    style="display:none;"
+  >
+
+<div class="cd-error-banner__inner"></div>
+
+  </div>
+
+  <!-- =========================================================
+       CATALOG HEADING
+       ========================================================= -->
+
+  <div class="cd-section-heading">
+
+<div>
+
+  <h2>
+    The case
+  </h2>
+
+  <span id="cd-result-count"></span>
+
+</div>
+
+
+<!-- ADD CAKE BUTTON -->
+
+<button
+  type="button"
+  id="cd-add-cake-btn"
+  class="cd-btn cd-btn--primary"
+>
+  + Add Cake
+</button>
+
+  </div>
+
+  <!-- =========================================================
+       CAKE GRID
+       ========================================================= -->
+
+  <main
+    id="cd-grid"
+    class="cd-grid"
+    aria-live="polite"
+  >
+
+<!-- Cake cards are injected by catalog.js -->
+
+  </main>
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+
+  <footer class="cd-footer">
+
+Cake Delight — a demo storefront over your
+catalog, basket, order, rating &amp; notification services.
+
+  </footer>
+
+  <!-- =========================================================
+       ADD CAKE MODAL
+       ========================================================= -->
+
+  <div
+    id="cd-add-cake-modal"
+    class="cd-modal"
+  >
+
+<div class="cd-modal__card">
+
+  <!-- Modal Header -->
+
+  <div class="cd-modal__header">
+
+    <div>
+
+      <p class="cd-modal__eyebrow">
+        Fresh from the kitchen
+      </p>
+
+      <h3>
+        Add a new cake
+      </h3>
+
+      <p class="cd-modal__subtitle">
+        Add a delicious cake to the Cake Delight catalog.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      id="cd-add-cake-close"
+      class="cd-modal__close"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <!-- Add Cake Form -->
+
+  <form id="cd-add-cake-form">
+
+    <div class="cd-form-grid">
+
+
+      <!-- Cake Name -->
+
+      <div
+        class="cd-modal__field cd-form-full"
+      >
+
+        <label for="cake-name">
+          Cake name *
+        </label>
+
+        <input
+          id="cake-name"
+          type="text"
+          placeholder="e.g. Chocolate Truffle Cake"
+          required
+        />
+
+      </div>
+
+
+      <!-- Description -->
+
+      <div
+        class="cd-modal__field cd-form-full"
+      >
+
+        <label for="cake-description">
+          Description
+        </label>
+
+        <textarea
+          id="cake-description"
+          rows="3"
+          placeholder="Describe this delicious cake..."
+        ></textarea>
+
+      </div>
+
+
+      <!-- Category -->
+
+      <div class="cd-modal__field">
+
+        <label for="cake-category">
+          Category *
+        </label>
+
+        <input
+          id="cake-category"
+          type="text"
+          placeholder="e.g. Chocolate"
+          required
+        />
+
+      </div>
+
+
+      <!-- Price -->
+
+      <div class="cd-modal__field">
+
+        <label for="cake-price">
+          Price *
+        </label>
+
+        <input
+          id="cake-price"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="450"
+          required
+        />
+
+      </div>
+
+
+      <!-- Image URL -->
+
+      <div
+        class="cd-modal__field cd-form-full"
+      >
+
+        <label for="cake-image">
+          Image URL
+        </label>
+
+        <input
+          id="cake-image"
+          type="url"
+          placeholder="https://example.com/cake.jpg"
+        />
+
+      </div>
+
+
+      <!-- Availability -->
+
+      <label class="cd-availability">
+
+        <input
+          id="cake-availability"
+          type="checkbox"
+          checked
+        />
+
+        <span>
+
+          <strong>
+            Available
+          </strong>
+
+          <small>
+            This cake can be added to baskets.
+          </small>
+
+        </span>
+
+      </label>
+
+
+    </div>
+
+
+    <!-- Modal Actions -->
+
+    <div class="cd-modal__actions">
+
+      <button
+        type="button"
+        id="cd-add-cake-cancel"
+        class="cd-btn cd-btn--ghost"
+      >
+        Cancel
+      </button>
+
+
+      <button
+        type="submit"
+        id="cd-add-cake-submit"
+        class="cd-btn cd-btn--primary"
+      >
+        Add Cake
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+  </div>
+
+  <!-- =========================================================
+       SERVICE SETTINGS MODAL
+       ========================================================= -->
+
+  <div
+    id="cd-settings-modal"
+    class="cd-modal"
+  >
+
+<div class="cd-modal__card">
+
+  <h3>
+    Service settings
+  </h3>
+
+  <p>
+    Point the app at your API gateway — every service
+    (catalog, basket, order, rating, notification)
+    is reached through it.
+  </p>
+
+
+  <form>
+
+    <div class="cd-modal__field">
+
+      <label for="cfg-gateway">
+        API gateway URL
+      </label>
+
+      <input
+        id="cfg-gateway"
+        type="text"
+        placeholder="http://localhost:8080"
+        required
+      />
+
+    </div>
+
+
+    <div class="cd-modal__actions">
+
+      <button
+        type="button"
+        data-reset-config
+        class="cd-btn cd-btn--ghost cd-btn--sm"
+      >
+        Reset defaults
+      </button>
+
+
+      <div style="display:flex; gap:8px;">
+
+        <button
+          type="button"
+          data-close-modal
+          class="cd-btn cd-btn--ghost cd-btn--sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="cd-btn cd-btn--primary cd-btn--sm"
+        >
+          Save
+        </button>
+
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
+
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT
+       ========================================================= -->
+
+  <script src="assets/js/config.js"></script>
+
+  <script src="assets/js/api.js"></script>
+
+  <script src="assets/js/user.js"></script>
+
+  <script src="assets/js/toast.js"></script>
+
+  <script src="assets/js/nav.js"></script>
+
+  <script src="assets/js/catalog.js"></script>
+
+</body>
+
+</html>

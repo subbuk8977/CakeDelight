@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cake Delight — Your Basket</title>
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<nav class="cd-navbar">
+  <div class="cd-navbar__inner">
+    <div class="cd-logo">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 21V13a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8" stroke="#C4486B" stroke-width="1.6" stroke-linecap="round"/><path d="M2 21h20" stroke="#3B2A20" stroke-width="1.6" stroke-linecap="round"/><path d="M6 11V8a6 6 0 0 1 12 0v3" stroke="#3B2A20" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="4" r="1.4" fill="#C89B3C"/></svg>
+      Cake Delight
+    </div>
+    <div class="cd-nav-links">
+      <a href="index.html" data-nav="catalog">Catalog</a>
+      <a href="basket.html" data-nav="basket" class="is-active">Basket <span id="cd-basket-count" class="cd-badge">0</span></a>
+      <a href="orders.html" data-nav="orders">Orders</a>
+    </div>
+    <span id="cd-user-chip" class="cd-user-chip" title="Click to change your baker ID"></span>
+    <button id="cd-settings-btn" class="cd-icon-btn" title="Service settings" aria-label="Settings">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.36.4.66.74.83.34.17.55.24.86.24H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div id="cd-error-banner" class="cd-error-banner" style="display:none; margin-top:24px;">
+  <div class="cd-error-banner__inner"></div>
+</div>
+
+<div class="cd-basket-layout">
+  <div>
+    <h1 class="cd-page-title">Your basket</h1>
+    <p class="cd-page-sub">Everything here is saved to your baker ID — review it before you checkout.</p>
+    <div id="cd-basket-items"><!-- items injected here --></div>
+  </div>
+
+  <aside class="cd-summary-card">
+    <h3>Order summary</h3>
+    <div class="cd-summary-row"><span>Items</span><span id="cd-sum-items">0</span></div>
+    <div class="cd-summary-row cd-summary-row--total"><span>Total</span><span id="cd-sum-total">₹0.00</span></div>
+    <button id="cd-checkout-btn" class="cd-btn cd-btn--gold cd-btn--full" style="margin-top:18px;">
+      Place order
+    </button>
+  </aside>
+</div>
+
+<footer class="cd-footer">Cake Delight — a demo storefront over your catalog, basket, order, rating &amp; notification services.</footer>
+
+<div id="cd-settings-modal" class="cd-modal">
+  <div class="cd-modal__card">
+    <h3>Service settings</h3>
+    <p>Point the app at your API gateway — every service (catalog, basket, order, rating, notification) is reached through it.</p>
+    <form>
+      <div class="cd-modal__field"><label for="cfg-gateway">API gateway URL</label><input id="cfg-gateway" type="text" placeholder="http://localhost:8080" required /></div>
+      <div class="cd-modal__actions">
+        <button type="button" data-reset-config class="cd-btn cd-btn--ghost cd-btn--sm">Reset defaults</button>
+        <div style="display:flex; gap:8px;">
+          <button type="button" data-close-modal class="cd-btn cd-btn--ghost cd-btn--sm">Cancel</button>
+          <button type="submit" class="cd-btn cd-btn--primary cd-btn--sm">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/user.js"></script>
+<script src="assets/js/toast.js"></script>
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/basket.js"></script>
+</body>
+</html>

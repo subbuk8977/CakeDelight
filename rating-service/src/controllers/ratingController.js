@@ -6,7 +6,23 @@ const ORDER_URL = process.env.ORDER_SERVICE_URL || "http://localhost:4002";
 
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
-// POST /api/ratings  { cakeId, userId, score, comment }
+const getRating = async (req,res)=>{
+  const ratingData = await Rating.find();
+  if (ratingData.length === 0) {
+    return res.status(200).json({
+      success: true,
+      count: 0,
+      data: [],
+    });
+  }
+
+  res.status(200).json({
+    success : true,
+    data : ratingData
+  })
+}
+
+// POST /api/ratings/submit  { cakeId, userId, score, comment }
 const submitRating = async (req, res) => {
   const { cakeId, userId, score, comment } = req.body;
   if (!cakeId || !userId || score === undefined) {
@@ -67,5 +83,6 @@ const getAverageRating = async (req, res) => {
 module.exports = { 
     submitRating, 
     getRatingsForCake, 
-    getAverageRating 
+    getAverageRating,
+    getRating
 };

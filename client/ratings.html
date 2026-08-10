@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Cake Delight — Ratings</title>
+
+  <!-- Your existing CSS -->
+  <link
+    rel="stylesheet"
+    href="assets/css/style.css"
+  />
+</head>
+
+<body>
+
+  <!-- =========================================================
+       NAVBAR
+       ========================================================= -->
+
+  <header class="cd-header">
+
+    <div class="cd-nav">
+
+      <!-- Logo -->
+
+      <a
+        href="index.html"
+        class="cd-logo"
+      >
+        🍰 Cake Delight
+      </a>
+
+
+      <!-- Navigation -->
+
+      <div class="cd-nav-links">
+
+        <a
+          href="index.html"
+          data-nav="catalog"
+        >
+          Catalog
+        </a>
+
+
+        <a
+          href="basket.html"
+          data-nav="basket"
+        >
+          Basket
+
+          <span
+            id="cd-basket-count"
+            class="cd-badge"
+          >
+            0
+          </span>
+        </a>
+
+
+        <a
+          href="orders.html"
+          data-nav="orders"
+        >
+          Orders
+        </a>
+
+
+        <a
+          href="ratings.html"
+          data-nav="ratings"
+        >
+          Ratings
+        </a>
+
+      </div>
+
+
+      <!-- User -->
+
+      <span
+        id="cd-user-chip"
+        class="cd-user-chip"
+        title="Click to change your baker ID"
+      ></span>
+
+
+      <!-- Settings -->
+
+      <button
+        id="cd-settings-btn"
+        class="cd-icon-btn"
+        type="button"
+        title="Service settings"
+        aria-label="Settings"
+      >
+        ⚙
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================================================
+       MAIN
+       ========================================================= -->
+
+  <main class="cd-page">
+
+    <!-- Page heading -->
+
+    <section class="cd-page-header">
+
+      <div>
+
+        <p class="cd-eyebrow">
+          Customer feedback
+        </p>
+
+        <h1>
+          Customer Ratings
+        </h1>
+
+        <p>
+          Rate cakes you have purchased and see what other
+          customers think.
+        </p>
+
+      </div>
+
+
+      <span
+        id="cd-ratings-count"
+        class="cd-result-count"
+      >
+        Loading…
+      </span>
+
+    </section>
+
+
+
+    <!-- =======================================================
+         ERROR
+         ======================================================= -->
+
+    <div
+      id="cd-ratings-error"
+      class="cd-error-banner"
+      style="display:none;"
+    >
+
+      <div class="cd-error-banner__inner"></div>
+
+    </div>
+
+
+
+    <!-- =======================================================
+         CAKE GRID
+         ======================================================= -->
+
+    <section
+      id="cd-ratings-grid"
+      class="cd-ratings-grid"
+    ></section>
+
+  </main>
+
+
+
+  <!-- =========================================================
+       RATINGS MODAL
+       Used for viewing individual reviews
+       ========================================================= -->
+
+  <div
+    id="cd-ratings-modal"
+    class="cd-modal"
+    aria-hidden="true"
+  >
+
+    <div class="cd-modal__card">
+
+      <!-- Header -->
+
+      <div class="cd-modal__header">
+
+        <div>
+
+          <p class="cd-modal__eyebrow">
+            Customer feedback
+          </p>
+
+          <h3 id="cd-ratings-modal-title">
+            Ratings
+          </h3>
+
+          <p
+            id="cd-ratings-modal-subtitle"
+            class="cd-modal__subtitle"
+          ></p>
+
+        </div>
+
+
+        <button
+          type="button"
+          id="cd-ratings-close"
+          class="cd-modal__close"
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+
+      <!-- Average -->
+
+      <div
+        id="cd-ratings-summary"
+        class="cd-ratings-summary"
+      ></div>
+
+
+
+      <!-- Individual ratings -->
+
+      <div
+        id="cd-rating-list"
+        class="cd-rating-list"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================================================
+       SETTINGS MODAL
+       Your nav.js expects this modal to exist
+       ========================================================= -->
+
+  <div
+    id="cd-settings-modal"
+    class="cd-modal"
+    aria-hidden="true"
+  >
+
+    <div class="cd-modal__card">
+
+      <div class="cd-modal__header">
+
+        <div>
+
+          <p class="cd-modal__eyebrow">
+            Configuration
+          </p>
+
+          <h3>
+            Service Settings
+          </h3>
+
+        </div>
+
+        <button
+          type="button"
+          class="cd-modal__close"
+          data-close-modal
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form>
+
+        <label for="cfg-gateway">
+          API Gateway URL
+        </label>
+
+        <input
+          id="cfg-gateway"
+          type="text"
+          placeholder="http://localhost:8080"
+          required
+        />
+
+
+        <div
+          style="
+            display:flex;
+            gap:10px;
+            margin-top:16px;
+          "
+        >
+
+          <button
+            type="submit"
+            class="cd-btn cd-btn--primary"
+          >
+            Save
+          </button>
+
+          <button
+            type="button"
+            class="cd-btn cd-btn--ghost"
+            data-reset-config
+          >
+            Reset
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================================================
+       SCRIPTS
+
+       IMPORTANT:
+       Your files are inside:
+
+       client/
+       └── assets/
+           └── js/
+
+       Therefore use assets/js/...
+       ========================================================= -->
+
+  <script src="assets/js/api.js" defer></script>
+
+  <script src="assets/js/config.js" defer></script>
+
+  <script src="assets/js/user.js" defer></script>
+
+  <script src="assets/js/toast.js" defer></script>
+
+  <script src="assets/js/nav.js" defer></script>
+
+  <script src="assets/js/ratings.js" defer></script>
+
+</body>
+</html>
