@@ -254,6 +254,7 @@ kubectl apply -f k8s/namespace.yaml
 
 ```bash
 kubectl apply -f k8s/infrastructure/catalog-mongo/
+kubectl apply -f k8s/infrastructure/order-mongo/
 kubectl apply -f k8s/infrastructure/notification-mongo/
 kubectl apply -f k8s/infrastructure/rating-mongo/
 kubectl apply -f k8s/infrastructure/rabbitmq/
