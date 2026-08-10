@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-service
+  namespace: cake-delight
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: catalog-service
+
+  template:
+    metadata:
+      labels:
+        app: catalog-service
+
+    spec:
+      containers:
+        - name: catalog-service
+          image: subbaiahkv/cakedelight-catalog-service:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 4001
+
+          env:
+            - name: PORT
+              value: "4001"
+
+            - name: MONGO_URI
+              value: "mongodb://catalog-mongo:27017/catalog_db"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4001
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "300m"
+              memory: "256Mi"

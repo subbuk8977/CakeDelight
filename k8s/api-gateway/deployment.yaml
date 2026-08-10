@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: cake-delight
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: subbaiahkv/cakedelight-api-gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: management
+              containerPort: 8081
+          env:
+            - name: CATALOG_SERVICE_URL
+              value: "http://catalog-service:4001"
+
+            - name: ORDER_SERVICE_URL
+              value: "http://order-service:4002"
+
+            - name: RATING_SERVICE_URL
+              value: "http://rating-service:4003"
+
+            - name: NOTIFICATION_SERVICE_URL
+              value: "http://notification-service:4004"

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rating-mongo
+  namespace: cake-delight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rating-mongo
+  template:
+    metadata:
+      labels:
+        app: rating-mongo
+    spec:
+      containers:
+        - name: rating-mongo
+          image: mongo:7
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: rating-mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: rating-mongo-data
+          persistentVolumeClaim:
+            claimName: rating-mongo-pvc

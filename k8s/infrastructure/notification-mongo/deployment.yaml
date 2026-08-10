@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-mongo
+  namespace: cake-delight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-mongo
+  template:
+    metadata:
+      labels:
+        app: notification-mongo
+    spec:
+      containers:
+        - name: notification-mongo
+          image: mongo:7
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: notification-mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: notification-mongo-data
+          persistentVolumeClaim:
+            claimName: notification-mongo-pvc

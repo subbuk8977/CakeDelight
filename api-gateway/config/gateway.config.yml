@@ -1,0 +1,139 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+
+apiEndpoints:
+  api:
+    host: localhost
+    paths: '/ip'
+  
+  catalogApi:
+    host: "*"
+    paths:
+      - "/api/catalog/*"
+
+  orderApi:
+    host: "*"
+    paths:
+      - "/api/orders/*"
+
+  basketApi:
+    host: "*"
+    paths:
+      - "/api/basket/*"
+
+  ratingApi:
+    host: "*"
+    paths:
+      - /api/ratings
+      - "/api/ratings/*"
+
+  notificationApi:
+    host: "*"
+    paths:
+      - "/api/notifications/*"
+
+serviceEndpoints:
+  httpbin:
+    url: 'https://httpbin.org'
+  
+  catalogService:
+    url: "${CATALOG_SERVICE_URL}"
+
+  orderService:
+    url: "${ORDER_SERVICE_URL}"
+
+  ratingService:
+    url: "${RATING_SERVICE_URL}"
+
+  notificationService:
+    url: "${NOTIFICATION_SERVICE_URL}"
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - api
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: httpbin 
+              changeOrigin: true
+  
+  catalogPipeline:
+    apiEndpoints:
+      - catalogApi
+    policies:
+      - cors: {}
+      - log:
+          - action:
+              message: "Catalog request: ${req.method} ${req.originalUrl}"
+      - rate-limit:
+          - action:
+              max: 100
+              windowMs: 60000
+              message: "Too many requests to Catalog service, slow down."
+      - proxy:
+          - action:
+              serviceEndpoint: catalogService
+              changeOrigin: true
+              stripPath: false
+  
+  orderPipeline:
+    apiEndpoints:
+      - orderApi
+      - basketApi
+    policies:
+      - cors: {}
+      - log:
+          - action:
+              message: "Order/Basket request: ${req.method} ${req.originalUrl}"
+      - rate-limit:
+          - action:
+              max: 100
+              windowMs: 60000
+              message: "Too many requests to Order service, slow down."
+      - proxy:
+          - action:
+              serviceEndpoint: orderService
+              changeOrigin: true
+              stripPath: false
+
+  ratingPipeline:
+    apiEndpoints:
+      - ratingApi
+    policies:
+      - cors: {}
+      - log:
+          - action:
+              message: "Rating request: ${req.method} ${req.originalUrl}"
+      - proxy:
+          - action:
+              serviceEndpoint: ratingService
+              changeOrigin: true
+              stripPath: false
+
+  notificationPipeline:
+    apiEndpoints:
+      - notificationApi
+    policies:
+      - cors: {}
+      - log:
+          - action:
+              message: "Notification request: ${req.method} ${req.originalUrl}"
+      - proxy:
+          - action:
+              serviceEndpoint: notificationService
+              changeOrigin: true
+              stripPath: false

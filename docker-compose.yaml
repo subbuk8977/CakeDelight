@@ -1,0 +1,162 @@
+services:
+
+  # =====================================================
+  # CATALOG MONGODB
+  # =====================================================
+
+  catalog-mongo:
+    image: mongo:7
+    container_name: catalog-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - catalog_data:/data/db
+
+  # =====================================================
+  # CATALOG SERVICE
+  # =====================================================
+
+  catalog-service:
+    image: subbaiahkv/cakedelight-catalog-service:latest
+    container_name: catalog-service
+    ports:
+      - "4001:4001"
+    environment:
+      PORT: 4001
+      MONGO_URI: mongodb://catalog-mongo:27017/catalog_db
+    depends_on:
+      - catalog-mongo
+
+  # =====================================================
+  # ORDER MONGODB
+  # =====================================================
+
+  order-mongo:
+    image: mongo:7
+    container_name: order-mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - order-mongo-data:/data/db
+
+  # =====================================================
+  # RABBITMQ
+  # =====================================================
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: cake-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: cakeadmin
+      RABBITMQ_DEFAULT_PASS: cakepass
+
+  # =====================================================
+  # ORDER SERVICE
+  # =====================================================
+
+  order-service:
+    image: subbaiahkv/cakedelight-order-service:latest
+    container_name: order-service
+    ports:
+      - "4002:4002"
+    environment:
+      PORT: 4002
+      MONGO_URI: mongodb://order-mongo:27017/order_db
+      RABBITMQ_URL: amqp://cakeadmin:cakepass@rabbitmq:5672
+      CATALOG_SERVICE_URL: http://catalog-service:4001
+    depends_on:
+      - order-mongo
+      - rabbitmq
+      - catalog-service
+
+  # =====================================================
+  # RATING MONGODB
+  # =====================================================
+
+  rating-mongo:
+    image: mongo:7
+    container_name: rating-mongo
+    ports:
+      - "27019:27017"
+    volumes:
+      - rating-mongo-data:/data/db
+
+  # =====================================================
+  # RATING SERVICE
+  # =====================================================
+
+  rating-service:
+    image: subbaiahkv/cakedelight-rating-service:latest
+    container_name: rating-service
+    ports:
+      - "4003:4003"
+    environment:
+      PORT: 4003
+      MONGO_URI: mongodb://rating-mongo:27017/rating_db
+      ORDER_SERVICE_URL: http://order-service:4002
+    depends_on:
+      - rating-mongo
+      - order-service
+
+  # =====================================================
+  # NOTIFICATION MONGODB
+  # =====================================================
+
+  notification-mongo:
+    image: mongo:7
+    container_name: notification-mongo
+    ports:
+      - "27020:27017"
+    volumes:
+      - notification-mongo-data:/data/db
+
+  # =====================================================
+  # NOTIFICATION SERVICE
+  # =====================================================
+
+  notification-service:
+    image: subbaiahkv/cakedelight-notification-service:latest
+    container_name: notification-service
+    ports:
+      - "4004:4004"
+    environment:
+      PORT: 4004
+      MONGO_URI: mongodb://notification-mongo:27017/notification_db
+      RABBITMQ_URL: amqp://cakeadmin:cakepass@rabbitmq:5672
+    depends_on:
+      - notification-mongo
+      - rabbitmq
+
+  # =====================================================
+  # API GATEWAY
+  # =====================================================
+
+  api-gateway:
+    image: subbaiahkv/cakedelight-api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      CATALOG_SERVICE_URL: http://catalog-service:4001
+      ORDER_SERVICE_URL: http://order-service:4002
+      RATING_SERVICE_URL: http://rating-service:4003
+      NOTIFICATION_SERVICE_URL: http://notification-service:4004
+    depends_on:
+      - catalog-service
+      - order-service
+      - rating-service
+      - notification-service
+
+# =====================================================
+# VOLUMES
+# =====================================================
+
+volumes:
+  catalog_data:
+  order-mongo-data:
+  rating-mongo-data:
+  notification-mongo-data:
