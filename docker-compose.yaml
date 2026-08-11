@@ -126,6 +126,8 @@ services:
       PORT: 4004
       MONGO_URI: mongodb://notification-mongo:27017/notification_db
       RABBITMQ_URL: amqp://cakeadmin:cakepass@rabbitmq:5672
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
     depends_on:
       - notification-mongo
       - rabbitmq

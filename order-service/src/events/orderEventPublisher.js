@@ -13,6 +13,7 @@ const publishOrderCompleted = (order) => {
     eventType: "ORDER_COMPLETED",
     orderId: order._id.toString(),
     userId: order.userId,
+    email: order.email,
     items: order.items,
     totalAmount: order.totalAmount,
     timestamp: new Date().toISOString(),

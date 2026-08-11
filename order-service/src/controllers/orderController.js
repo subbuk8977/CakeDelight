@@ -4,32 +4,71 @@ const { publishOrderCompleted } = require("../events/orderEventPublisher");
 
 // POST /api/orders/checkout  { userId }
 const checkout = async (req, res) => {
-  const { userId } = req.body;
-  if (!userId) {
-    return res.status(400).json({ success: false, message: "userId is required" });
+  try {
+    const { userId, email } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "userId is required",
+      });
+    }
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "email is required",
+      });
+    }
+
+    const basket = await Basket.findOne({ userId });
+
+    if (!basket || basket.items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Basket is empty",
+      });
+    }
+
+    const totalAmount = basket.items.reduce(
+      (sum, i) => sum + i.price * i.quantity,
+      0
+    );
+
+    const order = await Order.create({
+      userId,
+      email,
+      items: basket.items,
+      totalAmount,
+      status: "CONFIRMED",
+    });
+
+    // Clear basket after successful checkout
+    basket.items = [];
+    await basket.save();
+
+    // Publish event to RabbitMQ
+    const published = await publishOrderCompleted(order);
+
+    if (!published) {
+      console.warn(
+        `[order-service] Order ${order._id} created but event was not published`
+      );
+    }
+
+    return res.status(201).json({
+      success: true,
+      data: order,
+    });
+  } catch (error) {
+    console.error("[order-service] Checkout failed:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Checkout failed",
+      error: error.message,
+    });
   }
-
-  const basket = await Basket.findOne({ userId });
-  if (!basket || basket.items.length === 0) {
-    return res.status(400).json({ success: false, message: "Basket is empty" });
-  }
-
-  const totalAmount = basket.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-
-  const order = await Order.create({
-    userId,
-    items: basket.items,
-    totalAmount,
-    status: "CONFIRMED",
-  });
-
-  // clear basket after successful checkout
-  basket.items = [];
-  await basket.save();
-
-  await publishOrderCompleted(order);
-
-  res.status(201).json({ success: true, data: order });
 };
 
 // GET /api/orders/:userId  -> order history for a user

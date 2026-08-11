@@ -13,6 +13,12 @@ const orderItemSchema = new mongoose.Schema(
 const orderSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true, index: true },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
     items: { type: [orderItemSchema], required: true },
     totalAmount: { type: Number, required: true },
     status: {

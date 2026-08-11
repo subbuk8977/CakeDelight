@@ -28,6 +28,18 @@ spec:
 
             - name: RABBITMQ_URL
               value: "amqp://cakeadmin:cakepass@rabbitmq:5672"
+            
+            - name: EMAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: notification-email-secret
+                  key: EMAIL_USER
+
+            - name: EMAIL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: notification-email-secret
+                  key: EMAIL_PASS
           readinessProbe:
             httpGet:
               path: /health
