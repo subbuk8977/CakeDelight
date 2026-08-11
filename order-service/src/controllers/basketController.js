@@ -14,37 +14,72 @@ const getBasket = async (req, res) => {
 
 // POST /api/basket/:userId/items  { cakeId, quantity }
 const addItem = async (req, res) => {
-  const { userId } = req.params;
-  const { cakeId, quantity = 1 } = req.body;
+  try {
+    const { userId } = req.params;
+    const { cakeId, quantity = 1 } = req.body;
 
-  if (!cakeId) {
-    return res.status(400).json({ success: false, message: "cakeId is required" });
-  }
+    if (!cakeId) {
+      return res.status(400).json({
+        success: false,
+        message: "cakeId is required"
+      });
+    }
 
-  // fetch authoritative cake info (name/price) from Catalog Microservice via REST
-  
+    let basket = await Basket.findOne({ userId });
 
-  let basket = await Basket.findOne({ userId });
-  if (!basket) {
-    basket = new Basket({ userId, items: [] });
-  }
+    if (!basket) {
+      basket = new Basket({
+        userId,
+        items: []
+      });
+    }
 
-  const existing = basket.items.find((item) => item.cakeId === cakeId);
-  if (existing) {
-    existing.quantity += Number(quantity);
-  } else {
-    const { data } = await axios.get(`${CATALOG_URL}/api/catalog/cakes/${cakeId}`);
-    const cake = data.data;
-    basket.items.push({
-      cakeId,
-      name: cake.name,
-      price: cake.price,
-      quantity: Number(quantity),
+    const existing = basket.items.find(
+      (item) => item.cakeId === cakeId
+    );
+
+    if (existing) {
+      existing.quantity += Number(quantity);
+    } else {
+      const { data } = await axios.get(
+        `${CATALOG_URL}/api/catalog/cakes/${cakeId}`
+      );
+
+      const cake = data.data;
+
+      basket.items.push({
+        cakeId,
+        name: cake.name,
+        price: cake.price,
+        quantity: Number(quantity)
+      });
+    }
+
+    await basket.save();
+
+    res.status(200).json({
+      success: true,
+      data: basket
+    });
+
+  } catch (error) {
+  console.error("ADD ITEM ERROR:", error);
+  console.error("MESSAGE:", error.message);
+  console.error("RESPONSE:", error.response?.data);
+  console.error("STATUS:", error.response?.status);
+
+  if (error.response?.status === 404) {
+    return res.status(404).json({
+      success: false,
+      message: "Cake not found in catalog"
     });
   }
 
-  await basket.save();
-  res.status(200).json({ success: true, data: basket });
+  return res.status(500).json({
+    success: false,
+    message: error.message
+  });
+}
 };
 
 
