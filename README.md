@@ -20,7 +20,7 @@ The application can be run using **Docker Compose** or deployed using **Kubernet
 - [Notification Service](#-notification-service)
 - [Reliability & Observability](#-reliability--observability)
 - [Basic Application Flow](#-basic-application-flow)
-- [How to Test the Application](#-how-to-test-the-application)
+- [How to Test the Application](#how-to-test-the-application)
 
 ---
 
@@ -610,7 +610,7 @@ Email
 
 ---
 
-## 🖥️ How to Test the Application
+## How to Test the Application
 
 The project includes a frontend inside the `client/` folder.
 
@@ -643,7 +643,7 @@ Open the project in **Visual Studio Code**.
 Go to:
 
 ```text
-frontend/index.html
+client/index.html
 ```
 
 Right-click `index.html` and select **Open with Live Server**.
