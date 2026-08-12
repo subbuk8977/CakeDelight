@@ -7,6 +7,7 @@
   const sumTotal = document.getElementById("cd-sum-total");
   const checkoutBtn = document.getElementById("cd-checkout-btn");
   const errorBanner = document.getElementById("cd-error-banner");
+  const checkoutEmail = document.getElementById("cd-checkout-email");
 
   const THUMB_FALLBACK =
     "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&q=70&auto=format&fit=crop";
@@ -114,7 +115,7 @@
     showError("");
     try {
       const cfg = cdGetConfig();
-      const res = await cdFetch(`${cfg.basket}/api/basket/${cdGetUserId()}`, { timeout: 6000 });
+      const res = await cdFetch(`${cfg.basket}/api/basket/${cdGetUserId()}`, { timeout: 15000 });
       renderItems((res.data && res.data.items) || []);
     } catch (err) {
       itemsRoot.innerHTML = "";
@@ -156,7 +157,24 @@
       const cfg = cdGetConfig();
       const sinceId = await getLatestNotificationId();
 
-      const order = await cdPostJSON(`${cfg.order}/api/orders/checkout`, { userId: cdGetUserId() });
+      const email = checkoutEmail.value.trim();
+
+    if (!email) {
+      cdShowToast({
+        title: "Email required",
+        message: "Please enter your email address.",
+        tone: "error"
+      });
+      checkoutBtn.textContent = original;
+      checkoutBtn.disabled = false;
+      checkoutEmail.focus();
+      return;
+    }
+
+    const order = await cdPostJSON(`${cfg.order}/api/orders/checkout`, {
+      userId: cdGetUserId(),
+      email
+    });
       cdInvalidateCache(cfg.basket);
       cdInvalidateCache(cfg.order);
       cdRefreshBasketCount();

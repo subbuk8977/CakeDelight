@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: subbaiahkv/cakedelight-notification-service:latest
-          imagePullPolicy: Always
+          image: cakedelight-notification-service:local
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4004
           env:

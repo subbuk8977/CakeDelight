@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: cakedelight-api-gateway:local
-          imagePullPolicy: IfNotPresent
+          image: subbaiahkv/cakedelight-api-gateway:latest
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8080

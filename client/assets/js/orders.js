@@ -65,7 +65,7 @@
     return html;
   }
 
-  function renderOrders(orders) {
+  function renderOrders(orders, notifications) {
     if (orders.length === 0) {
       renderEmpty();
       return;
@@ -73,6 +73,16 @@
     list.innerHTML = orders
       .map((order) => {
         const items = order.items || [];
+        const notification = notifications.find(
+          (n) => String(n.orderId) === String(order._id)
+        );
+        const emailStatus = !notification
+        ? "⏳ Pending"
+        : notification.status === "SENT"
+        ? "✓ Sent"
+        : notification.status === "FAILED"
+        ? "✕ Failed"
+        : "⏳ Pending";
         return `
         <article class="cd-ticket" data-order-id="${order._id}">
           <div class="cd-ticket__header">
@@ -104,6 +114,9 @@
           </div>
           <div class="cd-ticket__footer">
             <span style="color:var(--cocoa-soft); font-size:.85rem;">${items.length} item${items.length === 1 ? "" : "s"}</span>
+            <span style="color:var(--cocoa-soft); font-size:.85rem;">
+              Email: ${emailStatus}
+            </span>
             <span class="cd-ticket__total">₹${order.totalAmount.toFixed(2)}</span>
           </div>
         </article>`;
@@ -178,13 +191,30 @@
     }
   }
 
+  async function getNotifications() {
+  try {
+    const cfg = cdGetConfig();
+    const res = await cdFetch(
+      `${cfg.notification}/api/notifications/${cdGetUserId()}`,
+      { timeout: 15000 }
+    );
+    return res.data || [];
+  } catch (err) {
+    return [];
+  }
+}
+
   async function loadOrders() {
     skeletonTickets();
     showError("");
     try {
       const cfg = cdGetConfig();
-      const res = await cdFetch(`${cfg.order}/api/orders/${cdGetUserId()}`, { timeout: 15000 });
-      renderOrders(res.data || []);
+      const [ordersRes, notifications] = await Promise.all([
+      cdFetch(`${cfg.order}/api/orders/${cdGetUserId()}`, { timeout: 15000 }),
+      getNotifications()
+    ]);
+
+    renderOrders(ordersRes.data || [], notifications);
     } catch (err) {
       list.innerHTML = "";
       showError(`Couldn't load your orders: ${err.message}`);

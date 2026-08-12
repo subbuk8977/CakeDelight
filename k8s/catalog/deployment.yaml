@@ -19,8 +19,8 @@ spec:
     spec:
       containers:
         - name: catalog-service
-          image: subbaiahkv/cakedelight-catalog-service:latest
-          imagePullPolicy: Always
+          image: cakedelight-catalog-service:local
+          imagePullPolicy: IfNotPresent
 
           ports:
             - containerPort: 4001

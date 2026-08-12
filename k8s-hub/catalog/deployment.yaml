@@ -1,47 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service
+  name: catalog-service
   namespace: cake-delight
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
-      app: order-service
+      app: catalog-service
+
   template:
     metadata:
       labels:
-        app: order-service
+        app: catalog-service
+
     spec:
       containers:
-        - name: order-service
-          image: cakedelight-order-service:local
-          imagePullPolicy: IfNotPresent
+        - name: catalog-service
+          image: subbaiahkv/cakedelight-catalog-service:latest
+          imagePullPolicy: Always
+
           ports:
-            - containerPort: 4002
+            - containerPort: 4001
+
           env:
             - name: PORT
-              value: "4002"
+              value: "4001"
 
             - name: MONGO_URI
-              value: "mongodb://order-mongo:27017/order_db"
+              value: "mongodb://catalog-mongo:27017/catalog_db"
 
-            - name: RABBITMQ_URL
-              value: "amqp://cakeadmin:cakepass@rabbitmq:5672"
-
-            - name: CATALOG_SERVICE_URL
-              value: "http://catalog-service:4001"
           readinessProbe:
             httpGet:
               path: /health
-              port: 4002
+              port: 4001
             initialDelaySeconds: 5
             periodSeconds: 10
 
           livenessProbe:
             httpGet:
               path: /health
-              port: 4002
+              port: 4001
             initialDelaySeconds: 15
             periodSeconds: 20
 
@@ -53,4 +54,3 @@ spec:
             limits:
               cpu: "300m"
               memory: "256Mi"
-          

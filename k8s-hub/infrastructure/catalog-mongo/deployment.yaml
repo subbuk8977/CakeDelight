@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-mongo
+  namespace: cake-delight
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: catalog-mongo
+
+  template:
+    metadata:
+      labels:
+        app: catalog-mongo
+
+    spec:
+      containers:
+        - name: catalog-mongo
+          image: mongo:7
+
+          ports:
+            - containerPort: 27017
+
+          volumeMounts:
+            - name: catalog-mongo-storage
+              mountPath: /data/db
+
+      volumes:
+        - name: catalog-mongo-storage
+          persistentVolumeClaim:
+            claimName: catalog-mongo-pvc

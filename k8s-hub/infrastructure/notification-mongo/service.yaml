@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-mongo
+  namespace: cake-delight
+spec:
+  selector:
+    app: notification-mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+  type: ClusterIP

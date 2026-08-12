@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: rating-service
-          image: subbaiahkv/cakedelight-rating-service:latest
-          imagePullPolicy: Always
+          image: cakedelight-rating-service:local
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4003
           env:
